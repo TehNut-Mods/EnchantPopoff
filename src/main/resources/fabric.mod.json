@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "enchantpopoff",
+  "version": "1.0.0",
+
+  "name": "Enchant Popoff",
+  "description": "Displays item enchantments under the item name popup when you switch to them.",
+  "authors": [
+    "TehNut"
+  ],
+  "contributors": [],
+
+  "license": "MIT",
+
+  "environment": "client",
+  "mixins": [
+    "popoff.client.json"
+  ],
+  "requires": {
+    "fabricloader": "=>0.4.0"
+  }
+}

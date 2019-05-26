@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "info.tehnut.enchantpopoff.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "soulbound-refmap.json",
+  "mixins": [
+    "MixinInGameHud"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
