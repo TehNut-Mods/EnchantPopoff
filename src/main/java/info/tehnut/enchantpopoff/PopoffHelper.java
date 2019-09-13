@@ -2,13 +2,13 @@ package info.tehnut.enchantpopoff;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.ChatFormat;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.List;
 
@@ -20,15 +20,15 @@ public class PopoffHelper {
         if (!stack.hasEnchantments())
             return false;
 
-        List<Component> enchantmentTooltips = PopoffHelper.getEnchantmentTooltip(stack);
+        List<Text> enchantmentTooltips = PopoffHelper.getEnchantmentTooltip(stack);
         if (CONFIG.shouldMergeLines())
             enchantmentTooltips = PopoffHelper.combineLines(enchantmentTooltips, client.textRenderer, scaledWidth);
         yPos -= (enchantmentTooltips.size() * client.textRenderer.fontHeight) - 2;
         client.textRenderer.drawWithShadow(name, xPos, yPos, 16777215 + (alpha << 24));
         yPos += 2;
-        for (Component line : enchantmentTooltips) {
+        for (Text line : enchantmentTooltips) {
             yPos += client.textRenderer.fontHeight + 1;
-            String lineText = line.getFormattedText();
+            String lineText = line.asFormattedString();
             int drawX = (scaledWidth - client.textRenderer.getStringWidth(lineText)) / 2;
             client.textRenderer.drawWithShadow(lineText, drawX, yPos, 16777215 + (alpha << 24));
         }
@@ -37,14 +37,14 @@ public class PopoffHelper {
         return true;
     }
 
-    private static List<Component> getEnchantmentTooltip(ItemStack stack) {
-        List<Component> components = Lists.newArrayList();
+    private static List<Text> getEnchantmentTooltip(ItemStack stack) {
+        List<Text> Texts = Lists.newArrayList();
         EnchantmentHelper.getEnchantments(stack).forEach((enchantment, level) -> {
-            Component line = enchantment.getTextComponent(level);
-            line.modifyStyle(style -> {
+            Text line = enchantment.getName(level);
+            line.styled(style -> {
                 style.setColor(CONFIG.getOverride(enchantment));
                 if (enchantment.getMaximumLevel() <= level) {
-                    ChatFormat maxLevel = CONFIG.getMaxLevelFormat();
+                    Formatting maxLevel = CONFIG.getMaxLevelFormat();
                     if (maxLevel.isColor())
                         style.setColor(maxLevel);
                     else {
@@ -59,18 +59,18 @@ public class PopoffHelper {
                     }
                 }
             });
-            components.add(line);
+            Texts.add(line);
         });
-        return components;
+        return Texts;
     }
 
-    private static List<Component> combineLines(List<Component> components, TextRenderer textRenderer, int maxWidth) {
-        List<Component> merged = Lists.newArrayList();
-        Component current = new TextComponent("");
-        for (Component entry : components) {
-            if (textRenderer.getStringWidth(current.getFormattedText()) > maxWidth / 2) {
+    private static List<Text> combineLines(List<Text> Texts, TextRenderer textRenderer, int maxWidth) {
+        List<Text> merged = Lists.newArrayList();
+        Text current = new LiteralText("");
+        for (Text entry : Texts) {
+            if (textRenderer.getStringWidth(current.asFormattedString()) > maxWidth / 2) {
                 merged.add(current);
-                current = new TextComponent("");
+                current = new LiteralText("");
             }
 
             current.append(current.getSiblings().isEmpty() ? "" : " | ").append(entry);

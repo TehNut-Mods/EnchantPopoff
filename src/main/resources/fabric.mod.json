@@ -18,8 +18,5 @@
       "config": "popoff.client.json",
       "environment": "client"
     }
-  ],
-  "requires": {
-    "fabricloader": "=>0.4.0"
-  }
+  ]
 }

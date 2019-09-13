@@ -2,7 +2,7 @@
   "required": true,
   "package": "info.tehnut.enchantpopoff.mixin",
   "compatibilityLevel": "JAVA_8",
-  "refmap": "soulbound-refmap.json",
+  "refmap": "enchantpopoff-refmap.json",
   "mixins": [
     "MixinInGameHud"
   ],
